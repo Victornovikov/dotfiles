@@ -2,7 +2,14 @@
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/vn/.oh-my-zsh"
+case `uname` in
+    Linux)
+        export ZSH="/home/vn/.oh-my-zsh"
+        ;;
+    *)
+        export ZSH="/Users/vn/.oh-my-zsh"
+        ;;
+esac
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -39,7 +46,7 @@ ZSH_THEME="agnoster"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -63,7 +70,7 @@ HIST_STAMPS="dd.mm.yyyy"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
- git github ubuntu history-substring-search vi-mode
+ git github ubuntu history-substring-search vi-mode docker zsh-syntax-highlighting zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh

@@ -521,6 +521,32 @@ before packages are loaded."
   ;; https://www.reddit.com/r/spacemacs/comments/bstiuj/how_to_enable_visuallinemode_by_default_in/
   (global-visual-line-mode t)
 
+   (defun toggle-window-split ()
+    (interactive)
+    (if (= (count-windows) 2)
+        (let* ((this-win-buffer (window-buffer))
+	             (next-win-buffer (window-buffer (next-window)))
+	             (this-win-edges (window-edges (selected-window)))
+	             (next-win-edges (window-edges (next-window)))
+	             (this-win-2nd (not (and (<= (car this-win-edges)
+					                                 (car next-win-edges))
+				                               (<= (cadr this-win-edges)
+					                                 (cadr next-win-edges)))))
+	             (splitter
+	              (if (= (car this-win-edges)
+		                   (car (window-edges (next-window))))
+		                'split-window-horizontally
+		              'split-window-vertically)))
+	        (delete-other-windows)
+	        (let ((first-win (selected-window)))
+	          (funcall splitter)
+	          (if this-win-2nd (other-window 1))
+	          (set-window-buffer (selected-window) this-win-buffer)
+	          (set-window-buffer (next-window) next-win-buffer)
+	          (select-window first-win)
+	          (if this-win-2nd (other-window 1))))))
+
+
   (with-eval-after-load 'org
       (setq org-agenda-files (directory-files-recursively "~/Dropbox/org/" "\\.org$"))
       (setq org-tag-alist '((:startgrouptag)
@@ -540,6 +566,8 @@ before packages are loaded."
         ;; "arl" 'org-roam
         "aordd" 'org-roam-dailies-find-today
         "aordc" 'org-roam-dailies-capture-today
+        "aorc" 'org-roam-capture
+        "aob" 'org-download-clipboard
         ;; "arf" 'org-roam-find-file
         ;; "arg" 'org-roam-graph
         )

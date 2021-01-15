@@ -55,7 +55,6 @@ This function should only modify configuration layer settings."
              shell-default-position 'bottom)
      spell-checking
      syntax-checking
-     tabs
      ;; version-control
      treemacs)
    
@@ -548,14 +547,10 @@ before packages are loaded."
 	          (select-window first-win)
 	          (if this-win-2nd (other-window 1))))))
 
-   (define-key ctl-x-4-map "t" 'toggle-window-split)
 
   (with-eval-after-load 'org
-      (if (equal system-type 'darwin)
-          (setq org-download-screenshot-method "/usr/sbin/screencapture -i %s"))
-      (setq org-download-image-org-width 400)
       (setq org-agenda-files (directory-files-recursively "~/Dropbox/org/" "\\.org$"))
-      ;; (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+      (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
       (setq org-tag-alist '((:startgrouptag)
                             ("msai")
                             (:grouptags)
@@ -567,9 +562,6 @@ before packages are loaded."
       (setq org-directory "~/Dropbox/org")
       (setq org-roam-directory "~/Dropbox/org/org-roam")
       (setq org-roam-dailies-directory "~/Dropbox/org/org-roam/daily/")
-      (add-hook 'auto-save-hook 'org-save-all-org-buffers)
-
-
       (add-hook 'after-init-hook 'org-roam-mode)
 
       (spacemacs/set-leader-keys
@@ -578,7 +570,6 @@ before packages are loaded."
         "aordc" 'org-roam-dailies-capture-today
         "aorc" 'org-roam-capture
         "aob" 'org-download-clipboard
-        "\\" 'org-download-screenshot
         ;; "arf" 'org-roam-find-file
         ;; "arg" 'org-roam-graph
         )
@@ -590,24 +581,6 @@ before packages are loaded."
         "rdh" 'org-roam-dailies-find-previous-note
         "rdl" 'org-roam-dailies-find-next-note
         )
-      (defvar org-roam-capture-immediate-template
-        '("d" "default" plain
-          #'org-roam-capture--get-point
-          "%?"
-          :file-name "%<%Y%m%d%H%M%S>-${slug}"
-          :head "#+title: ${title}\n#+created: %u\n#+last_modified: %U\n\n"
-          :unnarrowed t)
-        "Capture template to use for immediate captures in Org-roam.")
-
-      (defun org-roam-insert-immediate (arg &rest args)
-        "Find an Org-roam file, and insert a relative org link to it at point.
-          This variant inserts the link immediately by using the template
-          defined in `org-roam-capture-immediate-template'.  See
-          `org-roam-insert' for details."
-        (interactive "P")
-        (let ((org-roam-capture-templates (list org-roam-capture-immediate-template))
-              (args (push arg args)))
-          (apply #'org-roam-insert args)))
 
       (setq org-roam-dailies-capture-templates
             '(("d" "default" entry
@@ -623,13 +596,6 @@ before packages are loaded."
               :file-name "%<%Y%m%d%H%M%S>-${slug}"
               :head "#+TITLE: ${title}\n#+CREATED: %U\n\#+TAGS:\n\n"
               :unnarrowed t)
-
-              ("f" "fleeting notes" plain
-               (function org-roam-capture--get-point)
-               "* %<%Y-%m-%d-%H-%M> %? :fleeting:"
-               :file-name "fleeting"
-               :head "#+TITLE: fleeting\n#+TAGS: fleeting\n#+ROAM_TAGS: fleeting\n\n"
-               :unnarrowed t)
 
               ("p" "probability" plain
               (function org-roam-capture--get-point)

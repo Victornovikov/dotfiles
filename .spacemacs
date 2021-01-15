@@ -550,7 +550,9 @@ before packages are loaded."
 
   (with-eval-after-load 'org
       (setq org-agenda-files (directory-files-recursively "~/Dropbox/org/" "\\.org$"))
-      (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+
+      ;; (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+
       (setq org-tag-alist '((:startgrouptag)
                             ("msai")
                             (:grouptags)
@@ -596,6 +598,13 @@ before packages are loaded."
               :file-name "%<%Y%m%d%H%M%S>-${slug}"
               :head "#+TITLE: ${title}\n#+CREATED: %U\n\#+TAGS:\n\n"
               :unnarrowed t)
+
+              ("f" "fleeting notes" plain
+               (function org-roam-capture--get-point)
+               "* %<%Y-%m-%d-%H-%M> %? :fleeting:"
+               :file-name "fleeting"
+               :head "#+TITLE: fleeting\n#+TAGS: fleeting\n#+ROAM_TAGS: fleeting\n\n"
+               :unnarrowed t)
 
               ("p" "probability" plain
               (function org-roam-capture--get-point)

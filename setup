@@ -8,3 +8,5 @@ sudo dpkg -i /home/vn/Downloads/google-chrome-stable_current_amd64.deb
 git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 
 ln dotfiles/.spacemacs .spacemacs
+ln dotfiles/.zshrc .zshrc
+ln -sf dotfiles/kitty kitty.conf

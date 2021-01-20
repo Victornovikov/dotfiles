@@ -523,6 +523,16 @@ before packages are loaded."
   ;; https://www.reddit.com/r/spacemacs/comments/bstiuj/how_to_enable_visuallinemode_by_default_in/
   (global-visual-line-mode t)
 
+  (smartparens-global-mode t)
+
+  (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-minimum-prefix-length 2)
+  (setq company-idle-delay 0.25)
+  (setq company-backends '(company-capf))
+
+  (setq completion-ignore-case t)
+
+
    (defun toggle-window-split ()
     (interactive)
     (if (= (count-windows) 2)
@@ -567,6 +577,9 @@ before packages are loaded."
       (setq org-directory "~/Dropbox/org")
       (setq org-roam-directory "~/Dropbox/org/org-roam")
       (setq org-roam-dailies-directory "~/Dropbox/org/org-roam/daily/")
+
+      (setq org-roam-auto-replace-fuzzy-links nil)
+
       (add-hook 'auto-save-hook 'org-save-all-org-buffers)
 
 
@@ -659,6 +672,8 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
+ '(org-agenda-files
+   '("~/Dropbox/org/org-roam/daily/2021-01-09.org" "~/Dropbox/org/org-roam/daily/2021-01-10.org" "~/Dropbox/org/org-roam/daily/2021-01-11.org" "~/Dropbox/org/org-roam/daily/2021-01-12.org" "~/Dropbox/org/org-roam/daily/2021-01-13.org" "~/Dropbox/org/org-roam/20210109185036-knowledge_platform.org" "~/Dropbox/org/org-roam/20210112172324-variance_and_covariance.org" "~/Dropbox/org/org-roam/20210112173209-msai_probability_topics.org" "~/Dropbox/org/org-roam/20210112205454-variance_of_binomial_random_variable.org" "~/Dropbox/org/org-roam/20210113005817-brusnika_startap.org" "~/Dropbox/org/org-roam/20210113130359-cbs_inequality.org" "~/Dropbox/org/org-roam/20210113131934-markov_inequality.org" "~/Dropbox/org/org-roam/20210113141857-chebyshev_inequality.org" "~/Dropbox/org/org-roam/20210113142939-other_examples_of_variance_calculations.org" "~/Dropbox/org/org-roam/20210113143148-jensen_inequality.org" "~/Dropbox/org/org-roam/20210114151829-convergences.org" "~/Dropbox/org/org-roam/fleeting.org"))
  '(package-selected-packages
    '(centaur-tabs yasnippet-snippets xterm-color vterm terminal-here shell-pop multi-term helm-company helm-c-yasnippet fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip eshell-z eshell-prompt-extras esh-help company-reftex company-math math-symbol-lists company-auctex auto-yasnippet yasnippet auto-dictionary auctex-latexmk auctex ac-ispell auto-complete vmd-mode valign mmm-mode markdown-toc markdown-mode gh-md emoji-cheat-sheet-plus company-emoji company org-roam emacsql-sqlite3 emacsql org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-cliplink org-brain htmlize helm-org-rifle gnuplot evil-org ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs cfrs ht pfuture posframe toc-org symon symbol-overlay string-inflection spaceline-all-the-icons all-the-icons memoize spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired f evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils pkg-info epl elisp-slime-nav editorconfig dumb-jump dash s dired-quick-sort devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup which-key use-package pcre2el org-plus-contrib hydra lv hybrid-mode font-lock+ evil goto-chg dotenv-mode diminish bind-map bind-key async)))
 (custom-set-faces

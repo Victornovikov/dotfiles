@@ -68,7 +68,10 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages
+   '(
+     org-fragtog
+     )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -520,6 +523,11 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  ;; open new buffers in vertical split
+  (setq
+   split-width-threshold 0
+   split-height-threshold nil)
+
   ;; https://www.reddit.com/r/spacemacs/comments/bstiuj/how_to_enable_visuallinemode_by_default_in/
   (global-visual-line-mode t)
 
@@ -561,6 +569,15 @@ before packages are loaded."
    (define-key ctl-x-4-map "t" 'toggle-window-split)
 
   (with-eval-after-load 'org
+      (add-hook 'org-mode-hook 'org-fragtog-mode)
+      (setq org-highlight-latex-and-related '(latex script entities))
+      (setq org-latex-image-default-scale "")
+      (setq org-latex-image-default-width "")
+      (setq org-latex-image-default-height "")
+      (setq org-latex-image-default-option "scale=0.25")
+      ;; Put all the preview images in some directory
+      (setq org-preview-latex-image-directory "~/Dropbox/ltximg/")
+
       (if (equal system-type 'darwin)
           (setq org-download-screenshot-method "/usr/sbin/screencapture -i %s"))
       (setq org-download-image-org-width 400)
@@ -684,10 +701,4 @@ This function is called at the very end of Spacemacs initialization."
  '(package-selected-packages
    (quote
     (yasnippet-snippets xterm-color vterm unfill terminal-here shell-pop mwim multi-term helm-company helm-c-yasnippet fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip eshell-z eshell-prompt-extras esh-help company-reftex company-math math-symbol-lists company-auctex auto-yasnippet yasnippet auto-dictionary auctex ac-ispell auto-complete vmd-mode valign mmm-mode markdown-toc markdown-mode gh-md emoji-cheat-sheet-plus company-emoji company org-roam emacsql-sqlite3 emacsql org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-cliplink org-brain htmlize helm-org-rifle gnuplot evil-org ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs cfrs ht pfuture posframe toc-org symon symbol-overlay string-inflection spaceline-all-the-icons all-the-icons memoize spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired f evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils pkg-info epl elisp-slime-nav editorconfig dumb-jump dash s dired-quick-sort devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup which-key use-package pcre2el org-plus-contrib hydra lv hybrid-mode font-lock+ evil goto-chg dotenv-mode diminish bind-map bind-key async))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 )

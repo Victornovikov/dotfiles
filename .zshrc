@@ -1,5 +1,16 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin$PATH
+# path +=($HOME/bin:/usr/local/bin$PATH)
+# path +=(/usr/local/bin)
+# path +=(/Users/vn/.pyenv/versions/3.7.2/bin:$PATH)
+# path +=(/usr/local/opt/libpq/bin:$PATH)
+# path +=(/Applications/MacPorts/Emacs.app/Contents/MacOS:$PATH)
+# path +=($HOME/.emacs.d/bin:$PATH)
+# path +=($HOME/.local/bin:$PATH)
+
+export PATH=$HOME/bin:/usr/local/bin:/usr/local/bin:/Users/vn/.pyenv/versions/3.7.2/bin:/usr/local/opt/libpq/bin:/Applications/MacPorts/Emacs.app/Contents/MacOS:$HOME/.emacs.d/bin:$HOME/.local/bin:$HOME/bin:/usr/local/bin:$PATH
+
+# for testing
+export LOCAL=True
 
 # Path to your oh-my-zsh installation.
 case `uname` in
@@ -105,13 +116,3 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-export PATH=/Users/vn/.pyenv/versions/3.7.2/bin:$PATH
-
-export PATH="/usr/local/opt/libpq/bin:$PATH"
-
-export PATH="/Applications/MacPorts/Emacs.app/Contents/MacOS:$PATH"
-export PATH=”$HOME/.emacs.d/bin:$PATH”
-export PATH=$HOME/.local/bin:$PATH
-
-# for testing
-export LOCAL=True

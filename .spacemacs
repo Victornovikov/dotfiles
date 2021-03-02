@@ -32,23 +32,37 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(markdown
+   '(
+     (python :variables python-backend 'lsp)
+     markdown
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     auto-completion
+     (auto-completion :variables
+                      auto-completion-return-key-behavior 'complete
+                      auto-completion-tab-key-behavior 'cycle
+                      auto-completion-complete-with-key-sequence nil
+                      auto-completion-complete-with-key-sequence-delay 0.1
+                      auto-completion-minimum-prefix-length 2
+                      auto-completion-idle-delay 0.2
+                      auto-completion-private-snippets-directory nil
+                      auto-completion-enable-snippets-in-popup t
+                      auto-completion-enable-help-tooltip nil
+                      auto-completion-use-company-box nil
+                      auto-completion-enable-sort-by-usage t)
      ;; better-defaults
      latex
-     emacs-lisp
-     ;; git
      helm
      ;; lsp
      ;; markdown
      evil-russian
+     evil-commentary
+     emoji
      multiple-cursors
      (org :variables
+          ;; org-enable-org-journal-support t
           org-enable-roam-support t)
      (shell :variables
              shell-default-height 30
@@ -82,7 +96,7 @@ This function should only modify configuration layer settings."
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and deletes any unused
-   ;; packages as well as their unused dependencies. `used-but-keep-unused'
+   ;; packages as well as their unused depe dencies. `used-but-keep-unused'
    ;; installs only the used packages but won't delete unused ones. `all'
    ;; installs *all* packages supported by Spacemacs and never uninstalls them.
    ;; (default is `used-only')
@@ -523,6 +537,39 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  (setq multi-term-program "/usr/bin/zsh")
+  (setq require-final-newline t)
+  ;; (setq warning-minimum-level :error)
+
+  (spacemacs/toggle-automatic-symbol-highlight-on)
+  (spacemacs/toggle-indent-guide-globally-on)
+  (rainbow-delimiters-mode t)
+
+  ;; https://develop.spacemacs.org/layers/+completion/auto-completion/README.html
+  (custom-set-faces
+   '(company-tooltip-common
+     ((t (:inherit company-tooltip :weight bold :underline nil))))
+   '(company-tooltip-common-selection
+     ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+
+  ;;https://www.reddit.com/r/spacemacs/comments/bsz31k/configuring_pdftoolsauctex_to_open_pdf_files_in_a/
+  (setq pdf-sync-backward-display-action t)
+  (setq pdf-sync-forward-display-action t)
+  (with-eval-after-load 'tex
+    (require 'pdf-sync))
+
+  ;; https://tex.stackexchange.com/questions/190882/what-is-the-best-side-by-side-preview-method-for-emacs24-auctex
+  ;; (setq TeX-source-correlate-mode t)
+  ;; (setq TeX-source-correlate-start-server t)
+  ;; (setq TeX-source-correlate-method 'synctex)
+  ;; (setq TeX-view-program-list
+  ;;       '(("Okular" "okular --unique %o#src:%n`pwd`/./%b")
+  ;;         ("Skim" "displayline -b -g %n %o %b")
+  ;;         ("Zathura"
+  ;;          ("zathura %o"
+  ;;           (mode-io-correlate
+  ;;            " --synctex-forward %n:0:%b -x \"emacsclient +%{line} %{input}\"")))))
+
   ;; open new buffers in vertical split
   (setq
    split-width-threshold 0
@@ -533,7 +580,6 @@ before packages are loaded."
 
   (smartparens-global-mode t)
 
-  (add-hook 'after-init-hook 'global-company-mode)
   (setq company-minimum-prefix-length 2)
   (setq company-idle-delay 0.25)
   (setq company-backends '(company-capf))
@@ -569,6 +615,87 @@ before packages are loaded."
    (define-key ctl-x-4-map "t" 'toggle-window-split)
 
   (with-eval-after-load 'org
+
+    ;; (setq org-journal-date-prefix "#+TITLE: "
+    ;;       org-journal-enable-agenda-integration t
+    ;;       org-journal-file-type 'yearly
+    ;;       org-journal-start-on-weekday 1
+    ;;       org-journal-date-format "%A, %B %d %Y"
+    ;;       org-journal-time-prefix "* "
+    ;;       org-journal-time-format "" )
+
+    ;;  (setq org-journal-dir "~/Dropbox/org/journal/")
+
+      ;; (defun org-journal-find-location ()
+      ;;   ;; Open today's journal, but specify a non-nil prefix argument in order to
+      ;;   ;; inhibit inserting the heading; org-capture will insert the heading.
+      ;;   (org-journal-new-entry t)
+      ;;   (unless (eq org-journal-file-type 'daily)
+      ;;     (org-narrow-to-subtree))
+      ;;   (goto-char (point-max)))
+
+      ;; (setq org-capture-templates '(("j" "Journal entry" plain (function org-journal-find-location)
+      ;;                                "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?"
+      ;;                                :jump-to-captured t :immediate-finish t)))
+
+      ;;(add-hook 'org-mode-hook (lambda () 
+       ;;                          (define-key org-mode-map (kbd ", I g") 'org-mac-grab-link)))
+
+      ;; (define-key evil-normal-state-map (kbd "SPC m l g") 'org-mac-grab-link)
+      ;; https://orgmode.org/worg/org-dependencies.html https://emacs.stackexchange.com/questions/7996/is-there-a-way-to-resize-margins-when-exporting-pdf-in-org-mode
+      (setq org-latex-listings t)
+      (add-to-list 'org-latex-packages-alist '("" "listings"))
+      (add-to-list 'org-latex-packages-alist '("" "color"))
+      (add-to-list 'org-latex-packages-alist '("margin=2cm" "geometry" nil))
+
+      ;; org-download should respect block indent https://emacs.stackexchange.com/questions/9472/org-mode-source-block-doesnt-respect-parent-buffer-indentation
+      (setq org-src-preserve-indentation nil
+            org-edit-src-content-indentation 0)
+
+      ;; https://stackoverflow.com/questions/11272236/how-to-make-formule-bigger-in-org-mode-of-emacs
+      (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+
+      (defun drestivo/org-download-method (link)
+        "This is an helper function for org-download.
+      It creates an \"./image\" folder within the same directory of the org file.
+      Images are separated inside that image folder by additional folders one per
+      org file.
+      More info can be found here: https://github.com/abo-abo/org-download/issues/40.
+      See the commit message for an example:
+      https://github.com/abo-abo/org-download/commit/137c3d2aa083283a3fc853f9ecbbc03039bf397b"
+        (let ((filename
+              (file-name-nondirectory
+                (car (url-path-and-query
+                      (url-generic-parse-url link)))))
+              (dir (concat
+                    (file-name-directory (buffer-file-name))
+                    (format "%s/%s/%s"
+                            "images"
+                            (file-name-base (buffer-file-name))
+                            (org-download--dir-2)))))
+          (progn
+            (setq filename-with-timestamp (format "%s%s.%s"
+                                                  (file-name-sans-extension filename)
+                                                  (format-time-string org-download-timestamp)
+                                                  (file-name-extension filename)))
+            ;; Check if directory exists otherwise creates it
+            (unless (file-exists-p dir)
+              (make-directory dir t))
+            (message (format "Image: %s saved!" (expand-file-name filename-with-timestamp dir)))
+            (expand-file-name filename-with-timestamp dir))))
+
+      (setq org-download-method  'drestivo/org-download-method)
+
+      (setq org-capture-templates
+            '(("t" "Todo" entry (file+headline "~/Dropbox/org/todos.org" "Tasks")
+              "* TODO %U %?\n  %i\n  %a")
+              ("j" "Journal" entry (file+headline "~/Dropbox/org/journal.org" "Journal")
+               "* %U %? :daily:  %i\n  %a" :prepend t)
+              ("f" "Fleeting" entry (file+headline "~/Dropbox/org/fleeting.org" "Fleeting")
+               "* %U %? :fleeting:  %i\n  %a" :prepend t))
+            )
+            
+
       (add-hook 'org-mode-hook 'org-fragtog-mode)
       (setq org-highlight-latex-and-related '(latex script entities))
       (setq org-latex-image-default-scale "")
@@ -580,13 +707,13 @@ before packages are loaded."
 
       (if (equal system-type 'darwin)
           (setq org-download-screenshot-method "/usr/sbin/screencapture -i %s"))
-      (setq org-download-image-org-width 400)
+      (setq org-download-image-org-width 300)
       (setq org-agenda-files (directory-files-recursively "~/Dropbox/org/" "\\.org$"))
       ;; (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
       (setq org-tag-alist '((:startgrouptag)
                             ("msai")
                             (:grouptags)
-                            ("probability")
+                            (Phoebe Bridgers"probability")
                             ("algorithms")
                             ("optimization")
                             (:endgrouptag)
@@ -609,6 +736,7 @@ before packages are loaded."
         "aorc" 'org-roam-capture
         "aob" 'org-download-clipboard
         "\\" 'org-download-screenshot
+        "ё" 'org-download-screenshot
         ;; "arf" 'org-roam-find-file
         ;; "arg" 'org-roam-graph
         )
@@ -619,7 +747,9 @@ before packages are loaded."
         "rdc" 'org-roam-dailies-date
         "rdh" 'org-roam-dailies-find-previous-note
         "rdl" 'org-roam-dailies-find-next-note
+        "mlg" 'org-mac-grab-link
         )
+
       (defvar org-roam-capture-immediate-template
         '("d" "default" plain
           #'org-roam-capture--get-point
@@ -644,7 +774,8 @@ before packages are loaded."
               #'org-roam-capture--get-point
               "* %<%Y-%m-%d-%H-%M> %? :daily:"
               :file-name "daily/%<%Y-%m-%d>"
-              :head "#+title: %<%Y-%m-%d>\n\n")))
+              ;; :file-name "daily/%<%Y-%m-%d>"
+              :head "#+title: %<%Y-%m-%d>\n\n\n")))
 
       (setq org-roam-capture-templates
             '(("d" "default" plain
@@ -699,6 +830,12 @@ This function is called at the very end of Spacemacs initialization."
  '(org-agenda-files
    '("~/Dropbox/org/org-roam/daily/2021-01-09.org" "~/Dropbox/org/org-roam/daily/2021-01-10.org" "~/Dropbox/org/org-roam/daily/2021-01-11.org" "~/Dropbox/org/org-roam/daily/2021-01-12.org" "~/Dropbox/org/org-roam/daily/2021-01-13.org" "~/Dropbox/org/org-roam/20210109185036-knowledge_platform.org" "~/Dropbox/org/org-roam/20210112172324-variance_and_covariance.org" "~/Dropbox/org/org-roam/20210112173209-msai_probability_topics.org" "~/Dropbox/org/org-roam/20210112205454-variance_of_binomial_random_variable.org" "~/Dropbox/org/org-roam/20210113005817-brusnika_startap.org" "~/Dropbox/org/org-roam/20210113130359-cbs_inequality.org" "~/Dropbox/org/org-roam/20210113131934-markov_inequality.org" "~/Dropbox/org/org-roam/20210113141857-chebyshev_inequality.org" "~/Dropbox/org/org-roam/20210113142939-other_examples_of_variance_calculations.org" "~/Dropbox/org/org-roam/20210113143148-jensen_inequality.org" "~/Dropbox/org/org-roam/20210114151829-convergences.org" "~/Dropbox/org/org-roam/fleeting.org"))
  '(package-selected-packages
-   (quote
-    (yasnippet-snippets xterm-color vterm unfill terminal-here shell-pop mwim multi-term helm-company helm-c-yasnippet fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip eshell-z eshell-prompt-extras esh-help company-reftex company-math math-symbol-lists company-auctex auto-yasnippet yasnippet auto-dictionary auctex ac-ispell auto-complete vmd-mode valign mmm-mode markdown-toc markdown-mode gh-md emoji-cheat-sheet-plus company-emoji company org-roam emacsql-sqlite3 emacsql org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-cliplink org-brain htmlize helm-org-rifle gnuplot evil-org ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs cfrs ht pfuture posframe toc-org symon symbol-overlay string-inflection spaceline-all-the-icons all-the-icons memoize spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired f evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils pkg-info epl elisp-slime-nav editorconfig dumb-jump dash s dired-quick-sort devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup which-key use-package pcre2el org-plus-contrib hydra lv hybrid-mode font-lock+ evil goto-chg dotenv-mode diminish bind-map bind-key async))))
+   '(lsp-ui lsp-origami origami lsp-latex helm-lsp orgit magit-svn magit-section magit-gitflow magit-popup helm-gitignore helm-git-grep grip-mode gitignore-templates gitignore-mode github-search github-clone gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ fringe-helper git-gutter+ gist gh marshal logito pcache forge magit ghub closql emacsql-sqlite treepy git-commit with-editor emojify company-statistics browse-at-remote evil-commentary yapfify stickyfunc-enhance sphinx-doc pytest pyenv-mode py-isort poetry transient pippel pipenv pyvenv pip-requirements lsp-python-ms lsp-pyright live-py-mode importmagic epc ctable concurrent deferred helm-pydoc helm-gtags helm-cscope xcscope ggtags dap-mode lsp-treemacs bui lsp-mode dash-functional cython-mode counsel-gtags counsel swiper ivy company-anaconda blacken anaconda-mode pythonic yasnippet-snippets xterm-color vterm unfill terminal-here shell-pop mwim multi-term helm-company helm-c-yasnippet fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip eshell-z eshell-prompt-extras esh-help company-reftex company-math math-symbol-lists company-auctex auto-yasnippet yasnippet auto-dictionary auctex ac-ispell auto-complete vmd-mode valign mmm-mode markdown-toc markdown-mode gh-md emoji-cheat-sheet-plus company-emoji company org-roam emacsql-sqlite3 emacsql org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-cliplink org-brain htmlize helm-org-rifle gnuplot evil-org ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs cfrs ht pfuture posframe toc-org symon symbol-overlay string-inflection spaceline-all-the-icons all-the-icons memoize spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired f evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils pkg-info epl elisp-slime-nav editorconfig dumb-jump dash s dired-quick-sort devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup which-key use-package pcre2el org-plus-contrib hydra lv hybrid-mode font-lock+ evil goto-chg dotenv-mode diminish bind-map bind-key async)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
 )

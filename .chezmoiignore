@@ -1,0 +1,17 @@
+.claude/projects
+.claude/sessions
+.claude/cache
+.claude/file-history
+.claude/history.jsonl
+.claude/paste-cache
+.claude/mcp-needs-auth-cache.json
+.claude/backups
+.claude/downloads
+.claude/shell-snapshots
+.claude/session-env
+.claude/tasks
+.claude/telemetry
+.claude/plugins
+.claude/statsig
+.claude/settings.local.json
+.claude/**/*.log

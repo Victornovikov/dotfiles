@@ -1,1 +1,0 @@
-- [Don't over-confirm during guided procedures](feedback_autonomy.md) — for documented setup/runbook work, just execute; stop only for truly destructive or ambiguous steps

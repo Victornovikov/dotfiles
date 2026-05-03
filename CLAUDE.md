@@ -72,8 +72,8 @@ Managed by **chezmoi**; remote `git@github.com:Victornovikov/dotfiles.git`, sour
 
 - Per-machine variable `machine` lives in `~/.config/chezmoi/chezmoi.toml` (values so far: `neo`, `vn-m5`). Set on first init via `.chezmoi.toml.tmpl`'s `promptStringOnce`.
 - Templates: `dot_aerospace.toml.tmpl`, `dot_zshrc.tmpl` — branch on `.machine`. vn-m5 keeps the 3-monitor map + LM Studio PATH; everything else gets a flat `outer.top = 42` and no force-assignment.
-- Tracked: `~/.aerospace.toml`, `~/.zshrc`, `~/CLAUDE.md`, `~/macos_productivity.md`, `~/.config/{sketchybar,ghostty,starship.toml}`, `~/.claude/{skills,settings.json,projects/-Users-vn/memory/}`.
-- NOT tracked (machine-local): `~/.ssh/config`, Tailscale state, `~/.claude/{cache,sessions,history.jsonl,backups,…}`, `~/.claude/settings.local.json`.
+- Tracked: `~/.aerospace.toml`, `~/.zshrc`, `~/CLAUDE.md`, `~/macos_productivity.md`, `~/.config/{sketchybar,ghostty,starship.toml}`, `~/.claude/{skills,settings.json}`.
+- NOT tracked (machine-local): `~/.ssh/config`, Tailscale state, **`~/.claude/projects/-Users-vn/memory/` (auto-memory, intentionally per-machine)**, `~/.claude/{cache,sessions,history.jsonl,backups,…}`, `~/.claude/settings.local.json`. Excluded via `.chezmoiignore` in the source.
 - Workflow: edit file in place → `chezmoi re-add <path>` → `chezmoi cd && git add -A && git commit && git push`. On the other machine: `chezmoi update` (pull + apply).
 - New machine: `brew install chezmoi && chezmoi init --apply git@github.com:Victornovikov/dotfiles.git`, answer the machine prompt.
 

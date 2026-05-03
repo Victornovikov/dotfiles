@@ -1,0 +1,44 @@
+# ── Homebrew ──────────────────────────────────────────────
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# ── Local binaries ────────────────────────────────────────
+export PATH="$HOME/.local/bin:$PATH"
+
+# ── History ──────────────────────────────────────────────
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt SHARE_HISTORY          # share across sessions
+setopt HIST_IGNORE_ALL_DUPS   # no duplicate entries
+setopt HIST_REDUCE_BLANKS     # trim whitespace
+
+# ── Completion ───────────────────────────────────────────
+autoload -Uz compinit && compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
+# ── Key bindings ─────────────────────────────────────────
+bindkey -e                    # emacs mode (ctrl-a, ctrl-e, etc.)
+bindkey '^[[A' history-beginning-search-backward  # up arrow filters history
+bindkey '^[[B' history-beginning-search-forward   # down arrow filters history
+
+# ── Aliases ──────────────────────────────────────────────
+alias ll='ls -lAh'
+alias gs='git status'
+alias gd='git diff'
+alias gl='git log --oneline -20'
+
+# ── fzf ──────────────────────────────────────────────────
+source <(fzf --zsh)
+
+# ── Plugins ──────────────────────────────────────────────
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# ── Prompt (starship) ────────────────────────────────────
+eval "$(starship init zsh)"
+{{- if eq .machine "vn-m5" }}
+
+# ── LM Studio CLI (vn-m5 only) ───────────────────────────
+export PATH="$PATH:$HOME/.lmstudio/bin"
+{{- end }}

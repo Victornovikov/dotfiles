@@ -1,0 +1,153 @@
+# AeroSpace Tiling Window Manager Config
+
+start-at-login = true
+
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# Notify sketchybar on workspace change; start window borders
+after-startup-command = [
+  'exec-and-forget /opt/homebrew/bin/sketchybar',
+  'exec-and-forget /opt/homebrew/bin/borders active_color=0xffcb4b16 inactive_color=0xff586e75 width=4.0',
+]
+
+exec-on-workspace-change = ['/bin/bash', '-c',
+  '/opt/homebrew/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+]
+
+{{- if eq .machine "vn-m5" }}
+[workspace-to-monitor-force-assignment]
+# Sequence numbers are LEFT-TO-RIGHT x-coordinate position, not monitor-id.
+# Physical layout (left → right):
+#   1 = LG (portrait, leftmost at x=-1440)
+#   2 = Samsung (landscape, x=0)
+#   3 = Built-in laptop (x=504)
+1 = 3
+2 = 3
+3 = 3
+4 = 2
+5 = 2
+6 = 2
+7 = 1
+8 = 1
+9 = 1
+{{- else }}
+# Workspace-to-monitor assignment intentionally omitted on this machine.
+# Re-enable per-host with fallback lists for disconnect resilience,
+# e.g. `1 = [2, 1]` (prefer monitor 2, fallback to 1).
+{{- end }}
+
+[gaps]
+inner.horizontal = 10
+inner.vertical = 10
+outer.left = 10
+outer.right = 10
+outer.bottom = 10
+{{- if eq .machine "vn-m5" }}
+outer.top = [{monitor.'Built-in Retina Display' = 10}, 42]
+{{- else }}
+outer.top = 42
+{{- end }}
+
+[mode.main.binding]
+
+# --- Focus windows (vim) ---
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+# --- Move windows within workspace ---
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+
+# --- Focus monitors ---
+alt-tab = 'focus-monitor next'
+alt-shift-tab = 'focus-monitor prev'
+
+# --- Move window to monitor ---
+alt-shift-m = 'move-node-to-monitor next'
+
+# --- Move window to monitor and follow ---
+alt-ctrl-h = ['move-node-to-monitor left', 'focus-monitor left']
+alt-ctrl-l = ['move-node-to-monitor right', 'focus-monitor right']
+alt-ctrl-j = ['move-node-to-monitor down', 'focus-monitor down']
+alt-ctrl-k = ['move-node-to-monitor up', 'focus-monitor up']
+
+# --- Cycle through windows ---
+alt-n = 'focus dfs-next --boundaries workspace --boundaries-action wrap-around-the-workspace'
+alt-shift-n = 'focus dfs-prev --boundaries workspace --boundaries-action wrap-around-the-workspace'
+
+# --- Launchers ---
+alt-enter = 'exec-and-forget open -a Ghostty'
+alt-cmd-b = 'exec-and-forget open -na "Google Chrome" --args --new-window'
+alt-cmd-t = 'exec-and-forget open -a Telegram'
+
+# --- Layouts ---
+alt-slash = 'layout tiles horizontal vertical'
+alt-comma = 'layout accordion horizontal vertical'
+alt-f = 'fullscreen'
+alt-shift-f = 'layout floating tiling'
+alt-e = 'layout tiles horizontal vertical'
+alt-s = 'layout tiles vertical horizontal'
+
+# --- Resize ---
+alt-shift-minus = 'resize smart -50'
+alt-shift-equal = 'resize smart +50'
+alt-r = 'mode resize'
+
+# --- Workspaces ---
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+
+# --- Move window to workspace ---
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
+
+# --- Move window to workspace and follow ---
+alt-ctrl-1 = ['move-node-to-workspace 1', 'workspace 1']
+alt-ctrl-2 = ['move-node-to-workspace 2', 'workspace 2']
+alt-ctrl-3 = ['move-node-to-workspace 3', 'workspace 3']
+alt-ctrl-4 = ['move-node-to-workspace 4', 'workspace 4']
+alt-ctrl-5 = ['move-node-to-workspace 5', 'workspace 5']
+alt-ctrl-6 = ['move-node-to-workspace 6', 'workspace 6']
+alt-ctrl-7 = ['move-node-to-workspace 7', 'workspace 7']
+alt-ctrl-8 = ['move-node-to-workspace 8', 'workspace 8']
+alt-ctrl-9 = ['move-node-to-workspace 9', 'workspace 9']
+
+# --- Service mode ---
+alt-shift-semicolon = 'mode service'
+
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main']
+alt-shift-h = ['join-with left', 'mode main']
+alt-shift-j = ['join-with down', 'mode main']
+alt-shift-k = ['join-with up', 'mode main']
+alt-shift-l = ['join-with right', 'mode main']
+
+[mode.resize.binding]
+h = 'resize width -50'
+j = 'resize height +50'
+k = 'resize height -50'
+l = 'resize width +50'
+esc = 'mode main'
+enter = 'mode main'

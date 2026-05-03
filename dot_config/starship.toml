@@ -1,0 +1,46 @@
+# Starship prompt — Solarized Dark theme
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$nodejs\
+$python\
+$rust\
+$golang\
+$cmd_duration\
+$line_break\
+$character"""
+
+[character]
+success_symbol = "[❯](blue)"
+error_symbol = "[❯](red)"
+
+[directory]
+style = "blue bold"
+truncation_length = 3
+
+[git_branch]
+style = "green"
+format = "on [$branch]($style) "
+
+[git_status]
+style = "yellow"
+format = '([$all_status$ahead_behind]($style) )'
+
+[cmd_duration]
+min_time = 2000
+style = "cyan"
+format = "took [$duration]($style) "
+
+[nodejs]
+format = "via [$symbol($version)](green) "
+
+[python]
+format = "via [$symbol($version)](yellow) "
+
+[rust]
+format = "via [$symbol($version)](red) "
+
+[golang]
+format = "via [$symbol($version)](cyan) "

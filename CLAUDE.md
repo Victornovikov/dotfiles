@@ -1,0 +1,81 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Context
+
+This is Victor's personal macOS machine (Apple Silicon, macOS 26, zsh). Claude Code is used to manage and configure the system — installing tools, editing dotfiles, setting up workflows.
+
+## Communication style
+
+- Be terse. No trailing summaries, no restating what was just done.
+- Explain decisions and reasoning — Victor wants to learn why, not just what.
+- When something fails, diagnose the root cause before retrying. Don't guess-and-check in loops.
+
+## System details
+
+- Homebrew prefix: `/opt/homebrew/bin` — NOT in PATH for non-interactive shells (launchd, aerospace exec commands, etc.). Use full paths when configuring tools that spawn shell commands.
+- Shell: zsh
+- Architecture: arm64
+
+## Installed tools
+
+- **AeroSpace** — tiling window manager (cask)
+- **SketchyBar** — custom status bar (formula)
+- **JankyBorders** — `borders` command, draws outlines around AeroSpace windows to indicate focus (formula from `felixkratz/formulae`, launched via aerospace.toml `after-startup-command`)
+- **Ghostty** — terminal emulator
+- **Tailscale** — mesh VPN with SSH enabled (formula, daemon via `sudo brew services start tailscale`)
+- **Starship** — cross-shell prompt (formula)
+- **fzf** — fuzzy finder (formula)
+- **zsh-autosuggestions** — inline history suggestions (formula)
+- **zsh-syntax-highlighting** — command validation highlighting (formula)
+- **AWS CLI** — `aws` command (formula)
+- **AWS SAM CLI** — `sam` command for serverless (formula)
+- **Python 3.13** — via brew (formula)
+- **uv** — fast Python package/project manager (formula, replaces pip/venv/poetry)
+- **Node.js 25** — via brew (formula)
+- **Docker Desktop** — containers (cask)
+- **1Password** — password manager, SSH agent for GitHub auth (cask)
+- **GitHub CLI** — `gh` command (formula)
+- **VS Code** — `code` command (cask)
+- **Cursor** — Anysphere fork of VS Code, `cursor` command (cask)
+
+## Managed configs
+
+| Tool | Config path |
+|---|---|
+| AeroSpace | `~/.aerospace.toml` |
+| SketchyBar | `~/.config/sketchybar/sketchybarrc` |
+| SketchyBar plugins | `~/.config/sketchybar/plugins/` |
+| Ghostty | `~/.config/ghostty/config` |
+| Shortcuts reference | `~/macos_productivity.md` |
+| zsh | `~/.zshrc` |
+| Starship | `~/.config/starship.toml` |
+| SSH | `~/.ssh/config` |
+
+## Lessons learned
+
+- Daemon/server tools: brew formula, not cask. Tailscale SSH needs formula; cask is sandboxed.
+- `/opt/homebrew/bin` symlinks are brew-managed — `brew list <pkg>` before manually removing.
+- SSH keys live in 1Password; agent socket configured in `~/.ssh/config`. Don't set `IdentityFile`.
+- Ghostty sets `TERM=xterm-ghostty`; remotes don't know it. `~/.ssh/config` does `SetEnv TERM=xterm-256color`.
+- Ghostty Solarized: theme name is `Solarized Dark Patched` (no plain `Solarized Dark`).
+- SketchyBar runs under launchd — no `/opt/homebrew/bin` in PATH. Use full paths in `sketchybarrc`/plugins; failures silent.
+- AeroSpace: each workspace lives on one monitor (last shown); `alt-N` affects whichever monitor owns N. Pin via `workspace-to-monitor-force-assignment` (fallback lists supported).
+- AeroSpace prereq: System Settings → Desktop & Dock → Mission Control → "Displays have separate Spaces" OFF, then logout. Verify: `defaults read com.apple.spaces spans-displays` → `1` (UI label is inverted from the defaults key). One "Desktop" thumbnail in Mission Control = correct.
+- `outer.top` ≥ SketchyBar `bar.height` (32) or tiles overlap the bar. Per-monitor overrides assume a specific layout — single-display, use flat value (42).
+- `anysphere.*` extensions are Cursor-only (not on public VS Code marketplace). `vscode` brew directive uses `code` and fails; use `cursor --install-extension <id>`.
+
+## Skills
+
+- `/aerospace` — AeroSpace + SketchyBar configuration and troubleshooting
+
+## Theme
+
+Solarized Dark across all tools. Key colors (0xAARRGGBB):
+- Background: `0xff002b36`
+- Text: `0xff93a1a1`
+- Dimmed: `0xff586e75`
+- Highlight bg: `0xff073642`
+- Accent: `0xff268bd2`
+- Font: JetBrains Mono

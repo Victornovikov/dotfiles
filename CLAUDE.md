@@ -66,6 +66,17 @@ This is Victor's personal macOS machine (Apple Silicon, macOS 26, zsh). Claude C
 - `outer.top` ≥ SketchyBar `bar.height` (32) or tiles overlap the bar. Per-monitor overrides assume a specific layout — single-display, use flat value (42).
 - `anysphere.*` extensions are Cursor-only (not on public VS Code marketplace). `vscode` brew directive uses `code` and fails; use `cursor --install-extension <id>`.
 
+## Dotfile management
+
+Managed by **chezmoi**; remote `git@github.com:Victornovikov/dotfiles.git`, source at `~/.local/share/chezmoi/`.
+
+- Per-machine variable `machine` lives in `~/.config/chezmoi/chezmoi.toml` (values so far: `neo`, `vn-m5`). Set on first init via `.chezmoi.toml.tmpl`'s `promptStringOnce`.
+- Templates: `dot_aerospace.toml.tmpl`, `dot_zshrc.tmpl` — branch on `.machine`. vn-m5 keeps the 3-monitor map + LM Studio PATH; everything else gets a flat `outer.top = 42` and no force-assignment.
+- Tracked: `~/.aerospace.toml`, `~/.zshrc`, `~/CLAUDE.md`, `~/macos_productivity.md`, `~/.config/{sketchybar,ghostty,starship.toml}`, `~/.claude/{skills,settings.json,projects/-Users-vn/memory/}`.
+- NOT tracked (machine-local): `~/.ssh/config`, Tailscale state, `~/.claude/{cache,sessions,history.jsonl,backups,…}`, `~/.claude/settings.local.json`.
+- Workflow: edit file in place → `chezmoi re-add <path>` → `chezmoi cd && git add -A && git commit && git push`. On the other machine: `chezmoi update` (pull + apply).
+- New machine: `brew install chezmoi && chezmoi init --apply git@github.com:Victornovikov/dotfiles.git`, answer the machine prompt.
+
 ## Skills
 
 - `/aerospace` — AeroSpace + SketchyBar configuration and troubleshooting

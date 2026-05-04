@@ -13,11 +13,12 @@
 
 AEROSPACE=/opt/homebrew/bin/aerospace
 SKETCHYBAR=/opt/homebrew/bin/sketchybar
+JQ=/usr/bin/jq
 
 # Build positional array: arrangement_ids[i] = arrangement-id of the i-th
 # monitor from the left (matches AeroSpace's monitor-id ordering).
 mapfile -t arrangement_ids < <(
-  "$SKETCHYBAR" --query displays | jq -r 'sort_by(.frame.x) | .[]["arrangement-id"]'
+  "$SKETCHYBAR" --query displays | "$JQ" -r 'sort_by(.frame.x) | .[]["arrangement-id"]'
 )
 
 "$AEROSPACE" list-monitors --format '%{monitor-id}' | while read -r mid; do

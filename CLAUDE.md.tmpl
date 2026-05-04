@@ -6,6 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is Victor's personal macOS machine (Apple Silicon, macOS 26, zsh). Claude Code is used to manage and configure the system — installing tools, editing dotfiles, setting up workflows.
 
+## This machine
+
+{{- if eq .machine "vn-m5" }}
+- **Host**: `vn-m5` (Apple M5 Pro, 125 GB RAM)
+- **Role**: primary workstation — work, dev, gaming, local LLMs
+- **Displays**: 3-monitor setup (see `~/.aerospace.toml` workspace-to-monitor map)
+- **Peripherals**: none beyond displays
+{{- else if eq .machine "neo" }}
+- **Host**: `neo` (small Apple Silicon machine, 8 GB RAM)
+- **Role**: on-the-go / portable computer
+- **Displays**: built-in only or one external
+- **Peripherals**: none
+{{- else }}
+- **Host**: `{{ .machine }}` (unrecognized — update `CLAUDE.md.tmpl` to add a branch)
+{{- end }}
+
 ## Communication style
 
 - Be terse. No trailing summaries, no restating what was just done.
@@ -39,6 +55,9 @@ This is Victor's personal macOS machine (Apple Silicon, macOS 26, zsh). Claude C
 - **GitHub CLI** — `gh` command (formula)
 - **VS Code** — `code` command (cask)
 - **Cursor** — Anysphere fork of VS Code, `cursor` command (cask)
+{{- if eq .machine "vn-m5" }}
+- **qmd** — local markdown search CLI (`@tobilu/qmd` via npm); BM25 + vector + LLM rerank, GGUF-based, all on-device. CLI only; bundled Claude Code skill intentionally not installed. Index at `~/.cache/qmd/index.sqlite`.
+{{- end }}
 
 ## Managed configs
 

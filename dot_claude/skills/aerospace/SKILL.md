@@ -77,6 +77,17 @@ AeroSpace replaces macOS Spaces. Correct setup:
 - Verify with `defaults read com.apple.spaces spans-displays` → expect `1` (semantics inverted from UI: `1` = separate Spaces OFF = Spaces span all displays).
 - In Mission Control's top strip you should see only "Desktop" (no numbered Desktop 1/2/3). Per-monitor thumbnail differences below are expected — one Space, windows distributed across monitors.
 
+## macOS menu bar prerequisite (for SketchyBar at top)
+
+The macOS menu bar and SketchyBar both want to live at the top of the screen. Without hiding the system menu bar, SketchyBar sits under it and you see both — ugly, and the system bar steals the top edge for click targets.
+
+Fix: auto-hide the system menu bar so SketchyBar owns the top.
+- System Settings → Control Center → Menu Bar → **"Automatically hide and show the menu bar"** → **Always**.
+- Verify: `defaults read NSGlobalDomain _HIHideMenuBar` → expect `1`.
+- Effect: system menu bar hides until you flick the cursor to the top edge; SketchyBar stays visible at the top at all times because it's a separate overlay window.
+
+Note this also changes `outer.top` reasoning: with the menu bar always hidden, external monitors and the built-in display behave the same — no need for the per-monitor split documented in "Multi-monitor gap handling" below if you only run AeroSpace on machines with the bar always hidden.
+
 ## Workspace-to-monitor assignment
 
 AeroSpace workspaces each "live" on exactly one monitor — wherever they were last shown. `alt-N` only changes the monitor that owns workspace N; other monitors stay put. Without pinning, workspaces drift to whichever monitor was focused, making switching unpredictable.

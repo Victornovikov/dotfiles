@@ -18,6 +18,11 @@ This is Victor's personal macOS machine (Apple Silicon, macOS 26, zsh). Claude C
 - **Role**: on-the-go / portable computer
 - **Displays**: built-in only or one external
 - **Peripherals**: none
+{{- else if eq .machine "vn-mini" }}
+- **Host**: `vn-mini` (Mac mini, model identifier `Mac16,10`, arm64)
+- **Role**: desktop
+- **Displays**: one external Dell monitor
+- **Peripherals**: none
 {{- else }}
 - **Host**: `{{ .machine }}` (unrecognized — update `CLAUDE.md.tmpl` to add a branch)
 {{- end }}
